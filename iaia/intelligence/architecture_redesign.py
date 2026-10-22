@@ -1,0 +1,8 @@
+from iaia.models import RedesignProposal
+class ArchitectureRedesignEngine:
+    def propose(self, architecture, graph, findings):
+        proposals=[]
+        if list(graph.edges): proposals.append(RedesignProposal(title='Make dependency direction explicit', rationale='The current design contains statically observed import relationships that should be owned by clear interfaces.', benefits=['Smaller change surface','Clearer ownership'], tradeoffs=['Interface design and migration coordination'], migration_risks=['Temporary adapters may be needed'], suggested_changes=['Separate domain logic from adapters','Inject interfaces at boundaries']))
+        if any(len(c)>1 for c in __import__('networkx').simple_cycles(graph)): proposals.append(RedesignProposal(title='Break circular dependencies', rationale='Cycles make initialization and change impact harder to reason about.', benefits=['Independent testing','Reduced coupling'], tradeoffs=['May require moving shared types'], migration_risks=['Incorrect ownership during transition'], suggested_changes=['Move shared contracts to a neutral module','Use dependency inversion']))
+        if any(f.category in {'code-execution','secret-management','command-execution','deserialization'} for f in findings): proposals.append(RedesignProposal(title='Isolate security-sensitive operations', rationale='Verified static indicators justify a narrow, reviewed boundary for sensitive operations.', benefits=['Centralized validation','Easier security review'], tradeoffs=['Additional interface code'], migration_risks=['Behavior changes require regression coverage'], suggested_changes=['Use allowlists and typed inputs','Keep secrets outside source']))
+        return proposals

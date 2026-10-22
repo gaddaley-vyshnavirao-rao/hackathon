@@ -1,0 +1,18 @@
+File: requirements.txt
+````````plaintext
+streamlit>=1.36,<2
+networkx>=3.2,<4
+pydantic>=2.7,<3
+plotly>=5.22,<6
+reportlab>=4.2,<5
+pytest>=8.2,<9
+
+17 passed in 0.87s
+
+````````
+
+No use_container_width usages found.
+
+````````
+
+py -m pytest -q
